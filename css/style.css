@@ -13,6 +13,8 @@ body {
 
 .container {
     position: relative;
+    display: flex;
+    flex-direction: column;
     border-radius: 25px;
     margin-top: 60px;
     align-items: center;
@@ -20,7 +22,7 @@ body {
     height: 550px;
     background-color: white;
     padding: 30px 20px;
-    overflow: hidden;
+    padding-bottom: 10px;
 }
 
 .top-bar {
@@ -46,7 +48,13 @@ body {
     font-weight: 500;
     font-size: 13px;
     margin-bottom: 10px;
-    margin-top: 20px;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    margin-top: 10px;
 }
 
 .task-item {
@@ -62,7 +70,7 @@ body {
 }
 
 .task-item:hover {
-    background-color: green;
+    background-color: goldenrod;
 }
 
 @keyframes animation-in {
@@ -136,8 +144,8 @@ body {
     height: 50px;
     border-radius: 100%;
     position: absolute;
-    bottom: 20px;
-    right: 20px;
+    bottom: 10px;
+    right: 0px;
     transition: 0.3s;
 }
 
@@ -152,3 +160,88 @@ body {
 .add-button:hover {
     transform: rotate(90deg);
 }
+
+.add-button:active {
+    background-color: black;
+}
+
+.add-task:hover .add-task-input {
+    visibility: visible;
+    opacity: 100%;
+    bottom: 15px;
+}
+
+.add-task-input {
+    border: 1px solid blueviolet;
+    outline: none;
+    position: absolute;
+    border-radius: 25px;
+    left: 0;
+    bottom: 0px;
+    padding: 10px 15px;
+    transition: 0.3s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
+
+
+/*----------------------ADD TASK--------------------------*/
+.add-todo-screen {
+    display: none;
+}
+
+.add-button:hover ~ .add-todo-screen {
+    display:block;
+    z-index: 1;
+}
+
+.add-button:active .main-screen {
+    display: none;
+}
+
+.add-todo-screen input {
+    display: block;
+    margin-bottom: 10px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.add-todo-screen p {
+    margin-left: 10px;
+}
+
+#title-input {
+    width: 100%;
+    font-size: 20px;
+}
+
+#desc-input {
+    width: 100%;
+    outline: none;
+    border: none;
+    margin-bottom: 20px;
+    margin-left: 0px;
+}
+
+#desc-input:empty:before {
+    content: attr(placeholder);
+    position: absolute;
+    color: gray;
+    background-color: transparent;
+}
+
+#save-task {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-radius: 15px;
+    background-color: goldenrod;
+    color: white;
+    border: none;
+}
+

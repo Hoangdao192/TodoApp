@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,73 +11,88 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
     <script src="https://kit.fontawesome.com/a914f93d25.js" crossorigin="anonymous"></script>
     <title>Document</title>
 </head>
+
 <body>
     <div class="container">
         <div class="top-bar">
             <h1 id="app-title">Todo</h1>
             <i id="app-setting" class="fa-solid fa-ellipsis"></i>
         </div>
-        <div class="task">
-            <p class="section-title">Tasks</p>
-            <div class="task-item">
-                <input id="checkbox-1" type="checkbox">
-                <label for="checkbox-1">
-                    <i class="check-icon fa-xs fa-solid fa-check"></i>
-                </label>
-                <p class="task-short-description">Finish essay collaboration</p>
-                <i class="fa-solid fa-angle-down task-more-infor"></i>
+        <div class="content">
+            <div class="main-screen">
+                <div class="task">
+                    <p class="section-title">Tasks</p>
+                    <div class="task-item">
+                        <input id="checkbox-1" type="checkbox">
+                        <label for="checkbox-1">
+                            <i class="check-icon fa-xs fa-solid fa-check"></i>
+                        </label>
+                        <p class="task-short-description">Finish essay collaboration</p>
+                        <i class="fa-solid fa-angle-down task-more-infor"></i>
+                    </div>
+                    <div class="task-item">
+                        <input id="checkbox-2" type="checkbox">
+                        <label for="checkbox-2">
+                            <i class="check-icon fa-xs fa-solid fa-check"></i>
+                        </label>
+                        <p class="task-short-description">Read the next chapter of Montecristo</p>
+                        <!-- <i class="fa-solid fa-angle-down task-more-infor"></i> -->
+                    </div>
+                    <div class="task-item">
+                        <input id="checkbox-3" type="checkbox">
+                        <label for="checkbox-3">
+                            <i class="check-icon fa-xs fa-solid fa-check"></i>
+                        </label>
+                        <p class="task-short-description">Do the math for next Monday</p>
+                        <i class="fa-solid fa-angle-down task-more-infor"></i>
+                    </div>
+                    <div class="task-item">
+                        <input id="checkbox-4" type="checkbox">
+                        <label for="checkbox-4">
+                            <i class="check-icon fa-xs fa-solid fa-check"></i>
+                        </label>
+                        <p class="task-short-description">Take out the trash</p>
+                    </div>
+                </div>
+                <div class="completed">
+                    <p class="section-title">Completed</p>
+                    <div class="task-item">
+                        <input checked id="checkbox-5" type="checkbox">
+                        <label for="checkbox-5">
+                            <i class="check-icon fa-xs fa-solid fa-check"></i>
+                        </label>
+                        <p class="task-short-description">Clear the room</p>
+                    </div>
+                    <div class="task-item">
+                        <input checked id="checkbox-6" type="checkbox">
+                        <label for="checkbox-6">
+                            <i class="check-icon fa-xs fa-solid fa-check"></i>
+                        </label>
+                        <p class="task-short-description">Send the finished assignment</p>
+                    </div>
+                </div>
+                <div class="add-task">
+                    <div class="add-button">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <input placeholder="Write a new task" type="text" class="add-task-input">
+                </div>
+                
             </div>
-            <div class="task-item">
-                <input id="checkbox-2" type="checkbox">
-                <label for="checkbox-2">
-                    <i class="check-icon fa-xs fa-solid fa-check"></i>
-                </label>
-                <p class="task-short-description">Read the next chapter of Montecristo</p>
-                <!-- <i class="fa-solid fa-angle-down task-more-infor"></i> -->
-            </div>
-            <div class="task-item">
-                <input id="checkbox-3" type="checkbox">
-                <label for="checkbox-3">
-                    <i class="check-icon fa-xs fa-solid fa-check"></i>
-                </label>
-                <p class="task-short-description">Do the math for next Monday</p>
-                <i class="fa-solid fa-angle-down task-more-infor"></i>
-            </div>
-            <div class="task-item">
-                <input id="checkbox-4" type="checkbox">
-                <label for="checkbox-4">
-                    <i class="check-icon fa-xs fa-solid fa-check"></i>
-                </label>
-                <p class="task-short-description">Take out the trash</p>
-            </div>
-        </div>
-        <div class="completed">
-            <p class="section-title" >Completed</p>
-            <div class="task-item">
-                <input checked id="checkbox-5" type="checkbox">
-                <label for="checkbox-5">
-                    <i class="check-icon fa-xs fa-solid fa-check"></i>
-                </label>
-                <p class="task-short-description">Clear the room</p>
-            </div>
-            <div class="task-item">
-                <input checked id="checkbox-6" type="checkbox">
-                <label for="checkbox-6">
-                    <i class="check-icon fa-xs fa-solid fa-check"></i>
-                </label>
-                <p class="task-short-description">Send the finished assignment</p>
-            </div>
-        </div>
-        <div class="add-task">
-            <div class="add-button">
-                <i class="fa-solid fa-plus"></i>
+            <div class="add-todo-screen">
+                <input type="text" placeholder="Title" id="title-input">
+                <p placeholder="Description" contenteditable="true" id="desc-input"></p>
+                <i class="fa-regular fa-clock"></i><p>Deadline</p>
+                <button id="save-task">Save</button>
             </div>
         </div>
     </div>
-    
 </body>
+
 </html>
