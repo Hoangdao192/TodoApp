@@ -21,6 +21,7 @@
 <body>
     <div class="container">
         <div class="top-bar">
+            <i style="display: none;" class="fa-solid fa-arrow-left back-button"></i>
             <h1 id="app-title">Todo</h1>
             <i id="app-setting" class="fa-solid fa-ellipsis"></i>
         </div>
@@ -77,12 +78,10 @@
                         <p class="task-short-description">Send the finished assignment</p>
                     </div>
                 </div>
-                <div class="add-task">
                     <div class="add-button">
                         <i class="fa-solid fa-plus"></i>
                     </div>
-                    <input placeholder="Write a new task" type="text" class="add-task-input">
-                </div>
+                
                 
             </div>
             <div class="add-task-activity">
@@ -94,5 +93,43 @@
         </div>
     </div>
 </body>
+
+<script>
+    var addTaskButton = document.querySelector(".add-button");
+    var backButton = document.querySelector(".back-button");
+    
+    addTaskButton.addEventListener("click", showAddTaskActivity);
+    backButton.addEventListener("click", showMainActivity);
+
+    function showAddTaskActivity() {
+        console.log("called");
+        var mainActivity = document.querySelector(".main-activity");
+        var addTaskActivity = document.querySelector(".add-task-activity");
+        if (mainActivity.style.display != "none") {
+            mainActivity.style.display = "none";
+        }
+        if (addTaskActivity.style.display != "block") {
+            addTaskActivity.style.display = "block";
+        }
+
+        if (backButton.style.display != "inline-block") {
+            backButton.style.display = "inline-block";
+        }
+    }
+
+    function showMainActivity() {
+        var mainActivity = document.querySelector(".main-activity");
+        var addTaskActivity = document.querySelector(".add-task-activity");
+        if (addTaskActivity.style.display != "none") {
+            addTaskActivity.style.display = "none";
+        }
+        if (mainActivity.style.display != "block") {
+            mainActivity.style.display = "block";
+        }
+        if (backButton.style.display != "none") {
+            backButton.style.display = "none";
+        }
+    }
+</script>
 
 </html>

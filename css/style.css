@@ -27,7 +27,9 @@ body {
 
 .top-bar {
     position: relative;
+    display: flex;
     width: 100%;
+    align-items: center;
 }
 
 .top-bar h1 {
@@ -35,6 +37,12 @@ body {
     font-size: 25px;
     font-weight: 800;
     display: inline-block;
+}
+
+.back-button {
+    display: none;
+    position: relative;
+    margin-right: 20px;
 }
 
 #app-setting {
