@@ -244,3 +244,11 @@ body {
     border: none;
 }
 
+#save-task:hover {
+    background-color: olivedrab;
+}
+
+#save-task:active {
+    background-color: black;
+}
+

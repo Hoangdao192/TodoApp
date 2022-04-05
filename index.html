@@ -26,6 +26,7 @@
             <i id="app-setting" class="fa-solid fa-ellipsis"></i>
         </div>
         <div class="content">
+
             <div class="main-activity">
                 <div class="task">
                     <p class="section-title">Tasks</p>
@@ -78,28 +79,49 @@
                         <p class="task-short-description">Send the finished assignment</p>
                     </div>
                 </div>
-                    <div class="add-button">
-                        <i class="fa-solid fa-plus"></i>
-                    </div>
-                
-                
+                <div class="add-button">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
             </div>
+
             <div class="add-task-activity">
                 <input type="text" placeholder="Title" id="title-input">
                 <p placeholder="Description" contenteditable="true" id="desc-input"></p>
-                <i class="fa-regular fa-clock"></i><p>Deadline</p>
+                <i class="fa-regular fa-clock"></i>
+                <p>Deadline</p>
                 <button id="save-task">Save</button>
             </div>
         </div>
     </div>
 </body>
-
 <script>
+    class Task {
+        constructor(id, title, description) {
+            this.id = id;
+            this.title = title;
+            this.description = description;
+        }
+
+        get getId() {
+            return this.id;
+        }
+
+        get getTitle() {
+            return this.title;
+        }
+
+        get getDesciption() {
+            return this.description;
+        }
+    }
+
     var addTaskButton = document.querySelector(".add-button");
     var backButton = document.querySelector(".back-button");
-    
+    var saveTaskButton = document.getElementById("save-task");
+
     addTaskButton.addEventListener("click", showAddTaskActivity);
     backButton.addEventListener("click", showMainActivity);
+    saveTaskButton.addEventListener("click", createNewTask);
 
     function showAddTaskActivity() {
         console.log("called");
@@ -129,6 +151,31 @@
         if (backButton.style.display != "none") {
             backButton.style.display = "none";
         }
+    }
+
+    function createNewTask() {
+        var inputTitle = document.getElementById("title-input");
+        var inputDescription = document.getElementById("desc-input");
+        if (inputTitle.value == "") return;
+
+        console.log(inputTitle.value, " + ", inputDescription.innerHTML);
+
+        if (localStorage.getItem("taskArray") == null) {
+            var taskArray = [];
+            taskArray[0] = new Task(0, inputTitle.value, inputDescription.innerHTML);
+            localStorage.setItem("taskArray", JSON.stringify(taskArray));
+        } else {
+            var taskArray = JSON.parse(localStorage.getItem("taskArray"));
+            taskArray.push(new Task(taskArray.length, inputTitle.value, inputDescription.innerHTML));
+            localStorage.setItem("taskArray", JSON.stringify(taskArray));
+        }
+        var taskArray = JSON.parse(localStorage.getItem("taskArray"));
+        for (let i = 0; i < taskArray.length; ++i) {
+            var task = taskArray[i];
+            console.log("Id: ", task.id, " Title: ", task.title);
+        }
+
+        console.log(localStorage.getItem("taskArray").toString());
     }
 </script>
 
