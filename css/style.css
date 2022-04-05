@@ -186,20 +186,11 @@ body {
 
 
 /*----------------------ADD TASK--------------------------*/
-.add-todo-screen {
+.add-task-activity {
     display: none;
 }
 
-.add-button:hover ~ .add-todo-screen {
-    display:block;
-    z-index: 1;
-}
-
-.add-button:active .main-screen {
-    display: none;
-}
-
-.add-todo-screen input {
+.add-task-activity input {
     display: block;
     margin-bottom: 10px;
     border: none;
@@ -207,7 +198,7 @@ body {
     background-color: transparent;
 }
 
-.add-todo-screen p {
+.add-task-activity p {
     margin-left: 10px;
 }
 
