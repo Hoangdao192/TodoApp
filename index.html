@@ -30,36 +30,8 @@
             <div class="main-activity">
                 <div class="task">
                     <p class="section-title">Tasks</p>
-                    <div class="task-item">
-                        <input id="checkbox-1" type="checkbox">
-                        <label for="checkbox-1">
-                            <i class="check-icon fa-xs fa-solid fa-check"></i>
-                        </label>
-                        <p class="task-short-description">Finish essay collaboration</p>
-                        <i class="fa-solid fa-angle-down task-more-infor"></i>
-                    </div>
-                    <div class="task-item">
-                        <input id="checkbox-2" type="checkbox">
-                        <label for="checkbox-2">
-                            <i class="check-icon fa-xs fa-solid fa-check"></i>
-                        </label>
-                        <p class="task-short-description">Read the next chapter of Montecristo</p>
-                        <!-- <i class="fa-solid fa-angle-down task-more-infor"></i> -->
-                    </div>
-                    <div class="task-item">
-                        <input id="checkbox-3" type="checkbox">
-                        <label for="checkbox-3">
-                            <i class="check-icon fa-xs fa-solid fa-check"></i>
-                        </label>
-                        <p class="task-short-description">Do the math for next Monday</p>
-                        <i class="fa-solid fa-angle-down task-more-infor"></i>
-                    </div>
-                    <div class="task-item">
-                        <input id="checkbox-4" type="checkbox">
-                        <label for="checkbox-4">
-                            <i class="check-icon fa-xs fa-solid fa-check"></i>
-                        </label>
-                        <p class="task-short-description">Take out the trash</p>
+                    <div class="all-task">
+
                     </div>
                 </div>
                 <div class="completed">
@@ -119,6 +91,8 @@
     var backButton = document.querySelector(".back-button");
     var saveTaskButton = document.getElementById("save-task");
 
+    showMainActivity();
+
     addTaskButton.addEventListener("click", showAddTaskActivity);
     backButton.addEventListener("click", showMainActivity);
     saveTaskButton.addEventListener("click", createNewTask);
@@ -140,6 +114,7 @@
     }
 
     function showMainActivity() {
+        getAllTask();
         var mainActivity = document.querySelector(".main-activity");
         var addTaskActivity = document.querySelector(".add-task-activity");
         if (addTaskActivity.style.display != "none") {
@@ -176,6 +151,55 @@
         }
 
         console.log(localStorage.getItem("taskArray").toString());
+        showMainActivity();
+    }
+
+    function getAllTask() {
+        var taskArray = JSON.parse(localStorage.getItem("taskArray"));
+        var taskContainer = document.querySelector(".all-task");
+        taskContainer.innerHTML = "";
+        for (let i = 0; i < taskArray.length; ++i) {
+            // if (i > 4) break;
+            var task = taskArray[i];
+            var item = "<div class=\"task-item\">" +
+                            "<input style=\"display: none;\" type=\"text\" value=\"" + task.id + "\" id=\"taskId" + task.id + "\">" +
+                            "<input id=\"checkbox-" + task.id + "\" type=\"checkbox\">" +
+                            "<label for=\"checkbox-" + task.id + "\">" +
+                                "<i class=\"check-icon fa-xs fa-solid fa-check\"></i>" +
+                            "</label>" +
+                            "<p class=\"task-short-description\">" + task.title + "</p>" + 
+                            "<i class=\"fa-solid fa-angle-down task-more-infor\"></i>" +
+                        "</div>";
+            taskContainer.innerHTML += item;
+        }
+        var taskItems = document.querySelectorAll(".all-task .task-item");
+        var taskItemInputs = document.querySelectorAll(".all-task .task-item input[type=\"checkbox\"]");
+        for (let i = 0; i < taskItemInputs.length; ++i) {
+            taskItemInputs[i].addEventListener('change', function(event) {
+                if (event.currentTarget.checked) {
+                    deleteTask(taskArray[i].id);
+                    taskItems[i].style.animation = 'animation-out 0.3s ease';
+                    taskItems[i].addEventListener("animationend", () => {
+                        taskItems[i].parentNode.removeChild(taskItems[i]);
+                    });
+                }
+            });
+        }   
+    }
+
+    function deleteTask(taskId) {
+        var taskArray = JSON.parse(localStorage.getItem("taskArray"));
+        var taskDelete;
+        for (let i = 0; i < taskArray.length; ++i) {
+            if (taskArray[i].id == taskId) {
+                var temp = taskArray[0];
+                taskArray[0] = taskArray[i];
+                taskArray[i] = temp;
+                taskArray.shift();
+                break;
+            }
+        }
+        localStorage.setItem("taskArray", JSON.stringify(taskArray));
     }
 </script>
 
