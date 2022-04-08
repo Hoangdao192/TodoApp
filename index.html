@@ -35,20 +35,12 @@
                     </div>
                 </div>
                 <div class="completed">
-                    <p class="section-title">Completed</p>
-                    <div class="task-item">
-                        <input checked id="checkbox-5" type="checkbox">
-                        <label for="checkbox-5">
-                            <i class="check-icon fa-xs fa-solid fa-check"></i>
-                        </label>
-                        <p class="task-short-description">Clear the room</p>
+                    <div class="title">
+                        <p class="section-title">Completed</p>
+                        <p id="clear-task">Clear</p>
                     </div>
-                    <div class="task-item">
-                        <input checked id="checkbox-6" type="checkbox">
-                        <label for="checkbox-6">
-                            <i class="check-icon fa-xs fa-solid fa-check"></i>
-                        </label>
-                        <p class="task-short-description">Send the finished assignment</p>
+                    <div class="all-completed-task">
+                        
                     </div>
                 </div>
                 <div class="add-button">
@@ -66,141 +58,6 @@
         </div>
     </div>
 </body>
-<script>
-    class Task {
-        constructor(id, title, description) {
-            this.id = id;
-            this.title = title;
-            this.description = description;
-        }
-
-        get getId() {
-            return this.id;
-        }
-
-        get getTitle() {
-            return this.title;
-        }
-
-        get getDesciption() {
-            return this.description;
-        }
-    }
-
-    var addTaskButton = document.querySelector(".add-button");
-    var backButton = document.querySelector(".back-button");
-    var saveTaskButton = document.getElementById("save-task");
-
-    showMainActivity();
-
-    addTaskButton.addEventListener("click", showAddTaskActivity);
-    backButton.addEventListener("click", showMainActivity);
-    saveTaskButton.addEventListener("click", createNewTask);
-
-    function showAddTaskActivity() {
-        console.log("called");
-        var mainActivity = document.querySelector(".main-activity");
-        var addTaskActivity = document.querySelector(".add-task-activity");
-        if (mainActivity.style.display != "none") {
-            mainActivity.style.display = "none";
-        }
-        if (addTaskActivity.style.display != "block") {
-            addTaskActivity.style.display = "block";
-        }
-
-        if (backButton.style.display != "inline-block") {
-            backButton.style.display = "inline-block";
-        }
-    }
-
-    function showMainActivity() {
-        getAllTask();
-        var mainActivity = document.querySelector(".main-activity");
-        var addTaskActivity = document.querySelector(".add-task-activity");
-        if (addTaskActivity.style.display != "none") {
-            addTaskActivity.style.display = "none";
-        }
-        if (mainActivity.style.display != "block") {
-            mainActivity.style.display = "block";
-        }
-        if (backButton.style.display != "none") {
-            backButton.style.display = "none";
-        }
-    }
-
-    function createNewTask() {
-        var inputTitle = document.getElementById("title-input");
-        var inputDescription = document.getElementById("desc-input");
-        if (inputTitle.value == "") return;
-
-        console.log(inputTitle.value, " + ", inputDescription.innerHTML);
-
-        if (localStorage.getItem("taskArray") == null) {
-            var taskArray = [];
-            taskArray[0] = new Task(0, inputTitle.value, inputDescription.innerHTML);
-            localStorage.setItem("taskArray", JSON.stringify(taskArray));
-        } else {
-            var taskArray = JSON.parse(localStorage.getItem("taskArray"));
-            taskArray.push(new Task(taskArray.length, inputTitle.value, inputDescription.innerHTML));
-            localStorage.setItem("taskArray", JSON.stringify(taskArray));
-        }
-        var taskArray = JSON.parse(localStorage.getItem("taskArray"));
-        for (let i = 0; i < taskArray.length; ++i) {
-            var task = taskArray[i];
-            console.log("Id: ", task.id, " Title: ", task.title);
-        }
-
-        console.log(localStorage.getItem("taskArray").toString());
-        showMainActivity();
-    }
-
-    function getAllTask() {
-        var taskArray = JSON.parse(localStorage.getItem("taskArray"));
-        var taskContainer = document.querySelector(".all-task");
-        taskContainer.innerHTML = "";
-        for (let i = 0; i < taskArray.length; ++i) {
-            // if (i > 4) break;
-            var task = taskArray[i];
-            var item = "<div class=\"task-item\">" +
-                            "<input style=\"display: none;\" type=\"text\" value=\"" + task.id + "\" id=\"taskId" + task.id + "\">" +
-                            "<input id=\"checkbox-" + task.id + "\" type=\"checkbox\">" +
-                            "<label for=\"checkbox-" + task.id + "\">" +
-                                "<i class=\"check-icon fa-xs fa-solid fa-check\"></i>" +
-                            "</label>" +
-                            "<p class=\"task-short-description\">" + task.title + "</p>" + 
-                            "<i class=\"fa-solid fa-angle-down task-more-infor\"></i>" +
-                        "</div>";
-            taskContainer.innerHTML += item;
-        }
-        var taskItems = document.querySelectorAll(".all-task .task-item");
-        var taskItemInputs = document.querySelectorAll(".all-task .task-item input[type=\"checkbox\"]");
-        for (let i = 0; i < taskItemInputs.length; ++i) {
-            taskItemInputs[i].addEventListener('change', function(event) {
-                if (event.currentTarget.checked) {
-                    deleteTask(taskArray[i].id);
-                    taskItems[i].style.animation = 'animation-out 0.3s ease';
-                    taskItems[i].addEventListener("animationend", () => {
-                        taskItems[i].parentNode.removeChild(taskItems[i]);
-                    });
-                }
-            });
-        }   
-    }
-
-    function deleteTask(taskId) {
-        var taskArray = JSON.parse(localStorage.getItem("taskArray"));
-        var taskDelete;
-        for (let i = 0; i < taskArray.length; ++i) {
-            if (taskArray[i].id == taskId) {
-                var temp = taskArray[0];
-                taskArray[0] = taskArray[i];
-                taskArray[i] = temp;
-                taskArray.shift();
-                break;
-            }
-        }
-        localStorage.setItem("taskArray", JSON.stringify(taskArray));
-    }
-</script>
+<script src="javascript/script.js"></script>
 
 </html>

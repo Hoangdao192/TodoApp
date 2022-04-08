@@ -56,7 +56,8 @@ body {
 .section-title {
     font-weight: 500;
     font-size: 13px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
+    display: inline-block;
 }
 
 .content {
@@ -81,6 +82,40 @@ body {
 .task-item:hover {
     background-color: goldenrod;
 }
+
+.all-task {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 260px;
+}
+
+.all-completed-task {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 100px;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 0px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    border-radius: 15px;
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    border-radius: 15px;
+    background: #888;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 
 @keyframes animation-in {
     from {
@@ -149,8 +184,27 @@ body {
     color: #005457;
 }
 
+.completed {
+    position: relative;
+    align-items: baseline;
+}
+
 .completed .task-item .task-short-description {
     text-decoration: line-through;
+}
+
+.completed .title {
+    display: flex;
+}
+
+.completed p:nth-child(2) {
+    align-self: baseline;
+    display: inline-block;
+    font-size: 12px;
+    position: absolute;
+    right: 5px;
+    color: #63b4ff;
+    cursor: pointer;
 }
 
 .add-button {
