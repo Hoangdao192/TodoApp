@@ -1,8 +1,9 @@
 class Task {
-    constructor(id, title, description) {
+    constructor(id, title, description, status) {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.status = status;
     }
 
     get getId() {
@@ -15,6 +16,10 @@ class Task {
 
     get getDesciption() {
         return this.description;
+    }
+
+    get getStatus() {
+        return this.status;
     }
 }
 
@@ -30,7 +35,13 @@ addTaskButton.addEventListener("click", showAddTaskActivity);
 
 /*Add task activity*/
 backButton.addEventListener("click", showMainActivity);
-saveTaskButton.addEventListener("click", createNewTask);
+var titleInput = document.getElementById("title-input");
+var titleDesc = document.getElementById("desc-input");
+saveTaskButton.addEventListener("click", function() {
+    createNewTask(titleInput.value, titleDesc.innerHTML);
+    titleInput.value = "";
+    titleDesc.innerHTML = "";
+});
 clearCompletedTask.addEventListener("click", clearAllCompletedTask);
 
 function showAddTaskActivity() {
@@ -51,7 +62,6 @@ function showAddTaskActivity() {
 
 function showMainActivity() {
     getAllTask();
-    getAllCompletedTask();
     var mainActivity = document.querySelector(".main-activity");
     var addTaskActivity = document.querySelector(".add-task-activity");
     if (addTaskActivity.style.display != "none") {
@@ -63,92 +73,157 @@ function showMainActivity() {
     if (backButton.style.display != "none") {
         backButton.style.display = "none";
     }
-    calculateHeight();
 }
 
-function createNewTask() {
-    var inputTitle = document.getElementById("title-input");
-    var inputDescription = document.getElementById("desc-input");
-    if (inputTitle.value == "") return;
+// function createNewTask() {
+//     var inputTitle = document.getElementById("title-input");
+//     var inputDescription = document.getElementById("desc-input");
+//     if (inputTitle.value == "") return;
 
-    console.log(inputTitle.value, " + ", inputDescription.innerHTML);
+//     console.log(inputTitle.value, " + ", inputDescription.innerHTML);
 
-    if (localStorage.getItem("taskArray") == null) {
-        var taskArray = [];
-        taskArray[0] = new Task(0, inputTitle.value, inputDescription.innerHTML);
-        localStorage.setItem("taskArray", JSON.stringify(taskArray));
-    } else {
-        var taskArray = JSON.parse(localStorage.getItem("taskArray"));
-        taskArray.push(new Task(taskArray.length, inputTitle.value, inputDescription.innerHTML));
-        localStorage.setItem("taskArray", JSON.stringify(taskArray));
-    }
-    var taskArray = JSON.parse(localStorage.getItem("taskArray"));
-    for (let i = 0; i < taskArray.length; ++i) {
-        var task = taskArray[i];
-        console.log("Id: ", task.id, " Title: ", task.title);
-    }
+//     if (localStorage.getItem("taskArray") == null) {
+//         var taskArray = [];
+//         taskArray[0] = new Task(0, inputTitle.value, inputDescription.innerHTML);
+//         localStorage.setItem("taskArray", JSON.stringify(taskArray));
+//     } else {
+//         var taskArray = JSON.parse(localStorage.getItem("taskArray"));
+//         taskArray.push(new Task(taskArray.length, inputTitle.value, inputDescription.innerHTML));
+//         localStorage.setItem("taskArray", JSON.stringify(taskArray));
+//     }
+//     var taskArray = JSON.parse(localStorage.getItem("taskArray"));
+//     for (let i = 0; i < taskArray.length; ++i) {
+//         var task = taskArray[i];
+//         console.log("Id: ", task.id, " Title: ", task.title);
+//     }
 
-    console.log(localStorage.getItem("taskArray").toString());
-    showMainActivity();
-}
+//     console.log(localStorage.getItem("taskArray").toString());
+//     showMainActivity();
+// }
 
-function createNewTask(title, description) {
+function createNewTask(title, description, status = "not completed") {
     if (title == "") return;
 
     console.log(title, " + ", description);
 
     if (localStorage.getItem("taskArray") == null) {
         var taskArray = [];
-        taskArray[0] = new Task(0, title, description);
+        taskArray[0] = new Task(0, title, description, status);
         localStorage.setItem("taskArray", JSON.stringify(taskArray));
     } else {
         var taskArray = JSON.parse(localStorage.getItem("taskArray"));
-        taskArray.push(new Task(taskArray.length, title, description));
+        taskArray.push(new Task(taskArray.length, title, description, status));
         localStorage.setItem("taskArray", JSON.stringify(taskArray));
     }
+    showMainActivity();
+}
+
+function taskToCompleted(taskId) {
     var taskArray = JSON.parse(localStorage.getItem("taskArray"));
     for (let i = 0; i < taskArray.length; ++i) {
-        var task = taskArray[i];
-        console.log("Id: ", task.id, " Title: ", task.title);
+        if (taskArray[i].id == taskId) {
+            taskArray[i].status = "completed";
+            break;
+        }
     }
+    localStorage.setItem("taskArray", JSON.stringify(taskArray));
+}
 
-    console.log(localStorage.getItem("taskArray").toString());
+function taskToNotCompleted(taskId) {
+    var taskArray = JSON.parse(localStorage.getItem("taskArray"));
+    for (let i = 0; i < taskArray.length; ++i) {
+        if (taskArray[i].id == taskId) {
+            taskArray[i].status = "not completed";
+            break;
+        }
+    }
+    localStorage.setItem("taskArray", JSON.stringify(taskArray));
 }
 
 function getAllTask() {
     var taskArray = JSON.parse(localStorage.getItem("taskArray"));
     if (taskArray == null) return;
-    var taskContainer = document.querySelector(".all-task");
-    taskContainer.innerHTML = "";
+
+    var taskNotCompletedContainer = document.querySelector(".all-task");
+    var taskCompletedContainer = document.querySelector(".all-completed-task");
+
+    taskNotCompletedContainer.innerHTML = "";
+    taskCompletedContainer.innerHTML = "";
+
     for (let i = taskArray.length - 1; i >= 0; --i) {
-        // if (i > 4) break;
         var task = taskArray[i];
-        var item = "<div class=\"task-item\">" +
+        if (task.status == "not completed") {
+            var item = "<div taskId=\"" + task.id + "\" taskTitle=\"" + task.title + "\" taskDesc=\"" + task.description + "\" class=\"task-item\">" +
                         "<input style=\"display: none;\" type=\"text\" value=\"" + task.id + "\" id=\"taskId" + task.id + "\">" +
                         "<input id=\"checkbox-" + task.id + "\" type=\"checkbox\">" +
+                        "<label for=\"checkbox-" + task.id + "\">" +
+                            "<i class=\"check-icon fa-xs fa-solid fa-check\"></i>" +
+                        "</label>" +
+                        "<p class=\"task-short-description\">" + task.title + "</p>" +
+                        "<p class=\"task-description\">" + task.description + "</p>" +
+                        "<i class=\"fa-solid fa-angle-down task-more-infor\"></i>" +
+                    "</div>";
+
+            taskNotCompletedContainer.innerHTML += item;
+        } else {
+            var item = "<div taskId=\"" + task.id + "\" taskTitle=\"" + task.title + "\" taskDesc=\"" + task.description + "\" class=\"task-item\">" +
+                        "<input style=\"display: none;\" type=\"text\" value=\"" + task.id + "\" id=\"taskId" + task.id + "\">" +
+                        "<input checked id=\"checkbox-" + task.id + "\" type=\"checkbox\">" +
                         "<label for=\"checkbox-" + task.id + "\">" +
                             "<i class=\"check-icon fa-xs fa-solid fa-check\"></i>" +
                         "</label>" +
                         "<p class=\"task-short-description\">" + task.title + "</p>" + 
                         "<i class=\"fa-solid fa-angle-down task-more-infor\"></i>" +
                     "</div>";
-        taskContainer.innerHTML += item;
+
+            taskCompletedContainer.innerHTML += item;
+        }
     }
 
-    var taskItems = document.querySelectorAll(".all-task .task-item");
-
+    var tasksNotCompleted = document.querySelectorAll(".all-task .task-item");
     //  Thêm hiệu ứng và xử lý khi check hoàn thành task
-    for (let i = 0; i < taskItems.length; ++i) {
-        var taskItemInput = taskItems[i].querySelector("input[type=\"checkbox\"");
+    for (let i = 0; i < tasksNotCompleted.length; ++i) {
+        if (tasksNotCompleted[i].getAttribute("taskdesc") == "") {
+            tasksNotCompleted[i].querySelector(".task-more-infor").style.visibility = "hidden";
+            continue;
+        }
+        tasksNotCompleted[i].addEventListener('click', function() {
+            var taskDescription = tasksNotCompleted[i].querySelector(".task-description");
+            if (taskDescription.style.display == "none") {
+                taskDescription.style.display = "inline-block";
+            } else {
+                taskDescription.style.display = "none";
+            }
+        });
+
+        var taskItemInput = tasksNotCompleted[i].querySelector("input[type=\"checkbox\"");
         taskItemInput.addEventListener('change', (event) => {
             if (event.currentTarget.checked) {
-                var taskId = taskItems[i].querySelectorAll("input")[0].value;
-                createCompletedTask(taskId);
-                deleteTask(taskId);
-                taskItems[i].style.animation = 'animation-out 0.3s ease';
-                taskItems[i].addEventListener("animationend", () => {
-                    taskItems[i].parentNode.removeChild(taskItems[i]);
-                    getAllCompletedTask();
+                var taskId = tasksNotCompleted[i].querySelectorAll("input")[0].value;
+                taskToCompleted(taskId);
+                tasksNotCompleted[i].style.animation = 'animation-out 0.3s ease';
+                tasksNotCompleted[i].addEventListener("animationend", () => {
+                    tasksNotCompleted[i].parentNode.removeChild(tasksNotCompleted[i]);
+                    getAllTask();
+                    calculateHeight();
+                });
+            }
+        });
+    }
+
+    //  Thêm hiệu ứng và xử lý khi bỏ hoàn thành task
+    var tasksCompleted = document.querySelectorAll(".all-completed-task .task-item");
+    for (let i = 0; i < tasksCompleted.length; ++i) {
+        var taskItemInput = tasksCompleted[i].querySelector("input[type=\"checkbox\"");
+        taskItemInput.addEventListener('change', (event) => {
+            if (!event.currentTarget.checked) {
+                var taskId = tasksCompleted[i].querySelectorAll("input")[0].value;
+                taskToNotCompleted(taskId);
+                tasksCompleted[i].style.animation = 'animation-out 0.3s ease';
+                tasksCompleted[i].addEventListener("animationend", () => {
+                    tasksCompleted[i].parentNode.removeChild(tasksCompleted[i]);
+                    getAllTask();
+                    calculateHeight();
                 });
             }
         });
@@ -182,49 +257,17 @@ function createCompletedTask(taskId) {
     }
 }
 
-function getAllCompletedTask() {
-    var taskArray = JSON.parse(localStorage.getItem("taskCompletedArray"));
-    var taskContainer = document.querySelector(".all-completed-task");
-    taskContainer.innerHTML = "";
-    if (taskArray == null) return;
-    for (let i = taskArray.length - 1; i >= 0 ; --i) {
-        var task = taskArray[i];
-        var item = "<div class=\"task-item\">" +
-                        "<input style=\"display: none;\" type=\"text\" value=\"" + task.id + "\" id=\"taskId" + task.id + "\">" +
-                        "<input checked id=\"checkbox1-" + task.id + "\" type=\"checkbox\">" +
-                        "<label for=\"checkbox1-" + task.id + "\">" +
-                            "<i class=\"check-icon fa-xs fa-solid fa-check\"></i>" +
-                        "</label>" +
-                        "<p class=\"task-short-description\">" + task.title + "</p>" + 
-                        "<i class=\"fa-solid fa-angle-down task-more-infor\"></i>" +
-                    "</div>";
-        taskContainer.innerHTML += item;
-    }
-
-    //  Thêm hiệu ứng và xử lý khi bỏ hoàn thành task
-    var completedTasks = document.querySelectorAll(".all-completed-task .task-item");
-    for (let i = 0; i < completedTasks.length; ++i) {
-        var taskItemInput = completedTasks[i].querySelector("input[type=\"checkbox\"");
-        taskItemInput.addEventListener('change', (event) => {
-            if (!event.currentTarget.checked) {
-                var taskId = completedTasks[i].querySelectorAll("input")[0].value;
-                var task = getCompletedTask(taskId);
-                createNewTask(task.title, task.description);
-                deleteCompleteTask(taskId);
-                completedTasks[i].style.animation = 'animation-out 0.3s ease';
-                completedTasks[i].addEventListener("animationend", () => {
-                    completedTasks[i].parentNode.removeChild(completedTasks[i]);
-                    getAllCompletedTask();
-                    getAllTask();
-                });
-            }
-        });
-    }
-}
-
 function clearAllCompletedTask() {
-    localStorage.removeItem("taskCompletedArray");
-    getAllCompletedTask();
+    var taskArray = JSON.parse(localStorage.getItem("taskArray"));
+    var newTaskArray = [];
+    for (let i = 0; i < taskArray.length; ++i) {
+        if (taskArray[i].status == "not completed") {
+            taskArray[i].id = newTaskArray.length;
+            newTaskArray.push(taskArray[i]);
+        }
+    }
+    localStorage.setItem("taskArray", JSON.stringify(newTaskArray));
+    getAllTask();
 }
 
 function deleteTask(taskId) {
@@ -239,6 +282,13 @@ function deleteTask(taskId) {
         }
     }
     localStorage.setItem("taskArray", JSON.stringify(taskArray));
+    var taskArray = JSON.parse(localStorage.getItem("taskArray"));
+        for (let i = 0; i < taskArray.length; ++i) {
+            var task = taskArray[i];
+            console.log("Id: ", task.id, " Title: ", task.title);
+        }
+    
+        console.log(localStorage.getItem("taskArray").toString());
 }
 
 function getCompletedTask(taskId) {
@@ -251,7 +301,7 @@ function getCompletedTask(taskId) {
 }
 
 function deleteCompleteTask(taskId) {
-    var taskArray = JSON.parse(localStorage.getItem("taskCompletedArray"));
+    var taskArray = JSON.parse(localStorage.getItem("taskArray"));
     for (let i = 0; i < taskArray.length; ++i) {
         if (taskArray[i].id == taskId) {
             var temp = taskArray[0];
