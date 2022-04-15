@@ -25,7 +25,10 @@ var clearCompletedTask = document.getElementById("clear-task");
 
 showMainActivity();
 
+/*Main activity*/
 addTaskButton.addEventListener("click", showAddTaskActivity);
+
+/*Add task activity*/
 backButton.addEventListener("click", showMainActivity);
 saveTaskButton.addEventListener("click", createNewTask);
 clearCompletedTask.addEventListener("click", clearAllCompletedTask);
@@ -89,6 +92,29 @@ function createNewTask() {
     showMainActivity();
 }
 
+function createNewTask(title, description) {
+    if (title == "") return;
+
+    console.log(title, " + ", description);
+
+    if (localStorage.getItem("taskArray") == null) {
+        var taskArray = [];
+        taskArray[0] = new Task(0, title, description);
+        localStorage.setItem("taskArray", JSON.stringify(taskArray));
+    } else {
+        var taskArray = JSON.parse(localStorage.getItem("taskArray"));
+        taskArray.push(new Task(taskArray.length, title, description));
+        localStorage.setItem("taskArray", JSON.stringify(taskArray));
+    }
+    var taskArray = JSON.parse(localStorage.getItem("taskArray"));
+    for (let i = 0; i < taskArray.length; ++i) {
+        var task = taskArray[i];
+        console.log("Id: ", task.id, " Title: ", task.title);
+    }
+
+    console.log(localStorage.getItem("taskArray").toString());
+}
+
 function getAllTask() {
     var taskArray = JSON.parse(localStorage.getItem("taskArray"));
     if (taskArray == null) return;
@@ -110,6 +136,8 @@ function getAllTask() {
     }
 
     var taskItems = document.querySelectorAll(".all-task .task-item");
+
+    //  Thêm hiệu ứng và xử lý khi check hoàn thành task
     for (let i = 0; i < taskItems.length; ++i) {
         var taskItemInput = taskItems[i].querySelector("input[type=\"checkbox\"");
         taskItemInput.addEventListener('change', (event) => {
@@ -172,6 +200,26 @@ function getAllCompletedTask() {
                     "</div>";
         taskContainer.innerHTML += item;
     }
+
+    //  Thêm hiệu ứng và xử lý khi bỏ hoàn thành task
+    var completedTasks = document.querySelectorAll(".all-completed-task .task-item");
+    for (let i = 0; i < completedTasks.length; ++i) {
+        var taskItemInput = completedTasks[i].querySelector("input[type=\"checkbox\"");
+        taskItemInput.addEventListener('change', (event) => {
+            if (!event.currentTarget.checked) {
+                var taskId = completedTasks[i].querySelectorAll("input")[0].value;
+                var task = getCompletedTask(taskId);
+                createNewTask(task.title, task.description);
+                deleteCompleteTask(taskId);
+                completedTasks[i].style.animation = 'animation-out 0.3s ease';
+                completedTasks[i].addEventListener("animationend", () => {
+                    completedTasks[i].parentNode.removeChild(completedTasks[i]);
+                    getAllCompletedTask();
+                    getAllTask();
+                });
+            }
+        });
+    }
 }
 
 function clearAllCompletedTask() {
@@ -181,7 +229,6 @@ function clearAllCompletedTask() {
 
 function deleteTask(taskId) {
     var taskArray = JSON.parse(localStorage.getItem("taskArray"));
-    var taskDelete;
     for (let i = 0; i < taskArray.length; ++i) {
         if (taskArray[i].id == taskId) {
             var temp = taskArray[0];
@@ -192,6 +239,29 @@ function deleteTask(taskId) {
         }
     }
     localStorage.setItem("taskArray", JSON.stringify(taskArray));
+}
+
+function getCompletedTask(taskId) {
+    var taskArray = JSON.parse(localStorage.getItem("taskCompletedArray"));
+    for (let i = 0; i < taskArray.length; ++i) {
+        if (taskArray[i].id == taskId) {
+            return taskArray[i];
+        }
+    }
+}
+
+function deleteCompleteTask(taskId) {
+    var taskArray = JSON.parse(localStorage.getItem("taskCompletedArray"));
+    for (let i = 0; i < taskArray.length; ++i) {
+        if (taskArray[i].id == taskId) {
+            var temp = taskArray[0];
+            taskArray[0] = taskArray[i];
+            taskArray[i] = temp;
+            taskArray.shift();
+            break;
+        }
+    }
+    localStorage.setItem("taskCompletedArray", JSON.stringify(taskArray));
 }
 
 function calculateHeight() {
