@@ -48,9 +48,14 @@ function showAddTaskActivity() {
     console.log("called");
     var mainActivity = document.querySelector(".main-activity");
     var addTaskActivity = document.querySelector(".add-task-activity");
+    var editTaskAcitvity = document.querySelector(".edit-task-activity");
+    if (editTaskAcitvity.style.display != "none") {
+        editTaskAcitvity.style.display = "none";
+    }
     if (mainActivity.style.display != "none") {
         mainActivity.style.display = "none";
     }
+
     if (addTaskActivity.style.display != "block") {
         addTaskActivity.style.display = "block";
     }
@@ -64,15 +69,72 @@ function showMainActivity() {
     getAllTask();
     var mainActivity = document.querySelector(".main-activity");
     var addTaskActivity = document.querySelector(".add-task-activity");
+    var editTaskAcitvity = document.querySelector(".edit-task-activity");
+    if (editTaskAcitvity.style.display != "none") {
+        editTaskAcitvity.style.display = "none";
+    }
     if (addTaskActivity.style.display != "none") {
         addTaskActivity.style.display = "none";
     }
+
     if (mainActivity.style.display != "block") {
         mainActivity.style.display = "block";
     }
     if (backButton.style.display != "none") {
         backButton.style.display = "none";
     }
+}
+
+function showEditTaskActivity(taskId) {
+    console.log("called");
+    var mainActivity = document.querySelector(".main-activity");
+    var addTaskActivity = document.querySelector(".add-task-activity");
+    var editTaskAcitvity = document.querySelector(".edit-task-activity");
+    var titleInput = document.getElementById("edit-title");
+    var titleDesc = document.getElementById("edit-desc");  
+
+    if (addTaskActivity.style.display != "none") {
+        addTaskActivity.style.display = "none";
+    }
+    if (mainActivity.style.display != "none") {
+        mainActivity.style.display = "none";
+    }
+
+    if (editTaskAcitvity.style.display != "block") {
+        editTaskAcitvity.style.display = "block";
+    }
+
+    if (backButton.style.display != "inline-block") {
+        backButton.style.display = "inline-block";
+    }
+    
+    var taskArray = JSON.parse(localStorage.getItem("taskArray"));
+    var taskTitle = "";
+    var taskDesc = "";
+    for (let i = 0; i < taskArray.length; ++i) {
+        var task = taskArray[i];
+        if (task.id == taskId) {
+            taskTitle = task.title;
+            taskDesc = task.description;
+            break;
+        }
+    }
+    titleInput.value = taskTitle;
+    titleDesc.innerHTML = taskDesc;
+
+    var saveEdit = document.querySelector("#save-edit");
+    saveEdit.addEventListener('click', function() {
+        for (let i = 0; i < taskArray.length; ++i) {
+            var task = taskArray[i];
+            if (task.id == taskId) {
+                task.title = titleInput.value;
+                task.description = titleDesc.innerHTML;
+                break;
+            }
+        }
+        localStorage.setItem("taskArray", JSON.stringify(taskArray));
+        showMainActivity();
+    })
 }
 
 function createNewTask(title, description, status = "not completed") {
@@ -84,10 +146,12 @@ function createNewTask(title, description, status = "not completed") {
         var taskArray = [];
         taskArray[0] = new Task(0, title, description, status);
         localStorage.setItem("taskArray", JSON.stringify(taskArray));
+        localStorage.setItem("lastId", 1);
     } else {
         var taskArray = JSON.parse(localStorage.getItem("taskArray"));
-        taskArray.push(new Task(taskArray.length, title, description, status));
+        taskArray.push(new Task(parseInt(localStorage.getItem('lastId')) + 1, title, description, status));
         localStorage.setItem("taskArray", JSON.stringify(taskArray));
+        localStorage.setItem('lastId', parseInt(localStorage.getItem('lastId')) + 1);
     }
     showMainActivity();
 }
@@ -155,8 +219,7 @@ function getAllTask() {
                             "<i class=\"check-icon fa-xs fa-solid fa-check\"></i>" +
                         "</label>" +
                         "<p class=\"task-short-description\">" + task.title + "</p>" + 
-                        "<p class=\"task-description\">" + task.description + "</p>" +
-                        "<i class=\"fa-solid fa-angle-down task-more-infor\"></i>" +
+                        "<p class=\"task-description\">" + task.description + "</p>"
                     "</div>";
 
             taskCompletedContainer.innerHTML += item;
@@ -178,7 +241,12 @@ function getAllTask() {
                     var taskId = tasksNotCompleted[i].querySelectorAll("input")[0].value;
                     deleteTask(taskId);
                     getAllTask();
-                })
+                });
+                var editButton = taskMore.querySelector(".tool-item-edit");
+                editButton.addEventListener('click', function() {
+                    var taskId = tasksNotCompleted[i].querySelectorAll("input")[0].value;
+                    showEditTaskActivity(taskId);
+                });
         });
         
         var taskItemInput = tasksNotCompleted[i].querySelector("input[type=\"checkbox\"");
@@ -200,18 +268,15 @@ function getAllTask() {
     //  Thêm hiệu ứng và xử lý khi bỏ hoàn thành task
     var tasksCompleted = document.querySelectorAll(".all-completed-task .task-item");
     for (let i = 0; i < tasksCompleted.length; ++i) {
-        if (tasksCompleted[i].getAttribute("taskdesc") == "") {
-            tasksCompleted[i].querySelector(".task-more-infor").style.visibility = "hidden";
-        } else {
-            tasksCompleted[i].addEventListener('click', function() {
-                var taskDescription = tasksCompleted[i].querySelector(".task-description");
-                if (taskDescription.style.display == "none") {
-                    taskDescription.style.display = "inline-block";
-                } else {
-                    taskDescription.style.display = "none";
-                }
-            });
-        }
+        var taskDescription = tasksCompleted[i].querySelector(".task-description").style.display = "none";
+        tasksCompleted[i].addEventListener('click', function() {
+            var taskDescription = tasksCompleted[i].querySelector(".task-description");
+            if (taskDescription.style.display == "none") {
+                taskDescription.style.display = "inline-block";
+            } else {
+                taskDescription.style.display = "none";
+            }
+        });
 
         var taskItemInput = tasksCompleted[i].querySelector("input[type=\"checkbox\"");
         taskItemInput.addEventListener('change', (event) => {
@@ -229,33 +294,6 @@ function getAllTask() {
     }
 
     calculateHeight();
-}
-
-function createCompletedTask(taskId) {
-    var taskArray = JSON.parse(localStorage.getItem("taskArray"));
-    var taskTitle, taskDescription;
-    for (let i = 0; i < taskArray.length; ++i) {
-        if (taskArray[i].id == taskId) {
-            taskTitle = taskArray[i].title;
-            taskDescription = taskArray[i].description;
-            break;
-        }   
-    }
-
-    if (localStorage.getItem("taskCompletedArray") == null) {
-        var taskCompletedArray = [];
-        taskCompletedArray.push(new Task(taskId, taskTitle, taskDescription));
-        localStorage.setItem("taskCompletedArray", JSON.stringify(taskCompletedArray));
-    } else {
-        var taskCompletedArray = JSON.parse(localStorage.getItem("taskCompletedArray"));
-        taskCompletedArray.push(new Task(taskId, taskTitle, taskDescription));
-        localStorage.setItem("taskCompletedArray", JSON.stringify(taskCompletedArray));
-    }
-    var taskCompletedArray = JSON.parse(localStorage.getItem("taskArray"));
-    for (let i = 0; i < taskCompletedArray.length; ++i) {
-        var task = taskCompletedArray[i];
-        console.log("Id: ", task.id, " Title: ", task.title);
-    }
 }
 
 function clearAllCompletedTask() {
@@ -290,29 +328,6 @@ function deleteTask(taskId) {
         }
     
         console.log(localStorage.getItem("taskArray").toString());
-}
-
-function getCompletedTask(taskId) {
-    var taskArray = JSON.parse(localStorage.getItem("taskCompletedArray"));
-    for (let i = 0; i < taskArray.length; ++i) {
-        if (taskArray[i].id == taskId) {
-            return taskArray[i];
-        }
-    }
-}
-
-function deleteCompleteTask(taskId) {
-    var taskArray = JSON.parse(localStorage.getItem("taskArray"));
-    for (let i = 0; i < taskArray.length; ++i) {
-        if (taskArray[i].id == taskId) {
-            var temp = taskArray[0];
-            taskArray[0] = taskArray[i];
-            taskArray[i] = temp;
-            taskArray.shift();
-            break;
-        }
-    }
-    localStorage.setItem("taskCompletedArray", JSON.stringify(taskArray));
 }
 
 function calculateHeight() {

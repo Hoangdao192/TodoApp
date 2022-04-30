@@ -321,6 +321,66 @@ body {
     background-color: black;
 }
 
+/*--------------EDIT TASK-----------------*/
+/*----------------------ADD TASK--------------------------*/
+.edit-task-activity {
+    display: none;
+}
+
+.edit-task-activity input {
+    display: block;
+    margin-bottom: 10px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+}
+
+.edit-task-activity p {
+    margin-left: 10px;
+}
+
+#edit-title {
+    width: 100%;
+    font-size: 20px;
+}
+
+#edit-desc {
+    width: 100%;
+    outline: none;
+    border: none;
+    margin-bottom: 20px;
+    margin-left: 0px;
+}
+
+#edit-desc:empty:before {
+    content: attr(placeholder);
+    position: absolute;
+    color: gray;
+    background-color: transparent;
+}
+
+#save-edit {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-radius: 15px;
+    background-color: goldenrod;
+    color: white;
+    border: none;
+}
+
+#save-edit:hover {
+    background-color: olivedrab;
+}
+
+#save-edit:active {
+    background-color: black;
+}
+
 .more {
     width: 100%;
     display: none;
