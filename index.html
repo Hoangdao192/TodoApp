@@ -15,6 +15,21 @@
         href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
         rel="stylesheet">
     <script src="https://kit.fontawesome.com/a914f93d25.js" crossorigin="anonymous"></script>
+    <script>
+        function ready() {
+            if (document.readyState != 'loading'){
+                calculateHeight();
+            } else {
+                document.addEventListener('DOMContentLoaded', function(){
+                    calculateHeight();
+                });
+                window.addEventListener('resize', function(event) {
+                    calculateHeight();
+                }, true);
+            }
+        }
+        ready();
+    </script>
     <title>Document</title>
 </head>
 
@@ -31,7 +46,6 @@
                 <div class="task">
                     <p class="section-title">Tasks</p>
                     <div class="all-task">
-
                     </div>
                 </div>
                 <div class="completed">

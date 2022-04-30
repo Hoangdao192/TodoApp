@@ -87,13 +87,11 @@ body {
 .all-task {
     overflow-y: scroll;
     overflow-x: hidden;
-    max-height: 260px;
 }
 
 .all-completed-task {
     overflow-y: scroll;
     overflow-x: hidden;
-    max-height: 100px;
 }
 
 /* width */
@@ -184,7 +182,6 @@ body {
     font-size: 13px;
     margin-left: 25px;
     margin-top: 5px;
-    display: none;
     margin-bottom: 0;
 }
 
@@ -322,4 +319,86 @@ body {
 
 #save-task:active {
     background-color: black;
+}
+
+.more {
+    width: 100%;
+    display: none;
+}
+
+.tool {
+    display: flex;
+    width: 100%;
+    justify-content: right;
+    align-items: center;
+}
+
+.tool-item {
+    display: inline-block;
+    font-size: 12px;
+    position: relative;
+    background-color: #005457;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 15px;
+    margin: 0px 5px;
+    cursor: pointer;
+}
+
+@media screen and (min-width: 800px) {
+    ::-webkit-scrollbar {
+        width: 10px;
+      }
+      
+      /* Track */
+      ::-webkit-scrollbar-track {
+        border-radius: 15px;
+        background: #f1f1f1;
+      }
+      
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        border-radius: 15px;
+        background: #888;
+      }
+      
+      /* Handle on hover */
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+
+    .container {
+        width: 80%;
+        text-align: start;
+    }
+
+    .content {
+        align-items: baseline;
+    }
+    
+    .task {
+        width: 45%;
+        display: inline-block;
+        margin-right: 4%;
+        margin-left: 2%;
+    }
+
+    .completed {
+        vertical-align: top;
+        width: 45%;
+        display: inline-block;
+        position: relative;
+        top: 0;
+        max-width: 100%;
+    }
+
+    .all-completed-task {
+        padding-right: 5px;
+        overflow-y: auto;
+    }
+
+    .all-task {
+        padding-right: 5px;
+        overflow-y: auto;
+    }
 }

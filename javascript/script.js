@@ -75,32 +75,6 @@ function showMainActivity() {
     }
 }
 
-// function createNewTask() {
-//     var inputTitle = document.getElementById("title-input");
-//     var inputDescription = document.getElementById("desc-input");
-//     if (inputTitle.value == "") return;
-
-//     console.log(inputTitle.value, " + ", inputDescription.innerHTML);
-
-//     if (localStorage.getItem("taskArray") == null) {
-//         var taskArray = [];
-//         taskArray[0] = new Task(0, inputTitle.value, inputDescription.innerHTML);
-//         localStorage.setItem("taskArray", JSON.stringify(taskArray));
-//     } else {
-//         var taskArray = JSON.parse(localStorage.getItem("taskArray"));
-//         taskArray.push(new Task(taskArray.length, inputTitle.value, inputDescription.innerHTML));
-//         localStorage.setItem("taskArray", JSON.stringify(taskArray));
-//     }
-//     var taskArray = JSON.parse(localStorage.getItem("taskArray"));
-//     for (let i = 0; i < taskArray.length; ++i) {
-//         var task = taskArray[i];
-//         console.log("Id: ", task.id, " Title: ", task.title);
-//     }
-
-//     console.log(localStorage.getItem("taskArray").toString());
-//     showMainActivity();
-// }
-
 function createNewTask(title, description, status = "not completed") {
     if (title == "") return;
 
@@ -152,6 +126,7 @@ function getAllTask() {
 
     for (let i = taskArray.length - 1; i >= 0; --i) {
         var task = taskArray[i];
+        //  Create not completed task
         if (task.status == "not completed") {
             var item = "<div taskId=\"" + task.id + "\" taskTitle=\"" + task.title + "\" taskDesc=\"" + task.description + "\" class=\"task-item\">" +
                         "<input style=\"display: none;\" type=\"text\" value=\"" + task.id + "\" id=\"taskId" + task.id + "\">" +
@@ -160,12 +135,19 @@ function getAllTask() {
                             "<i class=\"check-icon fa-xs fa-solid fa-check\"></i>" +
                         "</label>" +
                         "<p class=\"task-short-description\">" + task.title + "</p>" +
-                        "<p class=\"task-description\">" + task.description + "</p>" +
-                        "<i class=\"fa-solid fa-angle-down task-more-infor\"></i>" +
+                        "<div class=\"more\">" +
+                            "<p class=\"task-description\">" + task.description + "</p>" +
+                            "<div class=\"tool\">" +
+                                "<p class=\"tool-item tool-item-edit\">Edit</p>" +
+                                "<p class=\"tool-item tool-item-delete\">Delete</p>" +
+                            "</div>" +
+                        "</div>" +
                     "</div>";
 
             taskNotCompletedContainer.innerHTML += item;
-        } else {
+        } 
+        //  Create completed task
+        else {
             var item = "<div taskId=\"" + task.id + "\" taskTitle=\"" + task.title + "\" taskDesc=\"" + task.description + "\" class=\"task-item\">" +
                         "<input style=\"display: none;\" type=\"text\" value=\"" + task.id + "\" id=\"taskId" + task.id + "\">" +
                         "<input checked id=\"checkbox-" + task.id + "\" type=\"checkbox\">" +
@@ -173,6 +155,7 @@ function getAllTask() {
                             "<i class=\"check-icon fa-xs fa-solid fa-check\"></i>" +
                         "</label>" +
                         "<p class=\"task-short-description\">" + task.title + "</p>" + 
+                        "<p class=\"task-description\">" + task.description + "</p>" +
                         "<i class=\"fa-solid fa-angle-down task-more-infor\"></i>" +
                     "</div>";
 
@@ -183,21 +166,24 @@ function getAllTask() {
     var tasksNotCompleted = document.querySelectorAll(".all-task .task-item");
     //  Thêm hiệu ứng và xử lý khi check hoàn thành task
     for (let i = 0; i < tasksNotCompleted.length; ++i) {
-        if (tasksNotCompleted[i].getAttribute("taskdesc") == "") {
-            tasksNotCompleted[i].querySelector(".task-more-infor").style.visibility = "hidden";
-            continue;
-        }
         tasksNotCompleted[i].addEventListener('click', function() {
-            var taskDescription = tasksNotCompleted[i].querySelector(".task-description");
-            if (taskDescription.style.display == "none") {
-                taskDescription.style.display = "inline-block";
-            } else {
-                taskDescription.style.display = "none";
-            }
+                var taskMore = tasksNotCompleted[i].querySelector(".more");
+                if (taskMore.style.display == "none") {
+                    taskMore.style.display = "block";
+                } else {
+                    taskMore.style.display = "none";
+                }
+                var deleteButton = taskMore.querySelector(".tool-item-delete");
+                deleteButton.addEventListener('click', function() {
+                    var taskId = tasksNotCompleted[i].querySelectorAll("input")[0].value;
+                    deleteTask(taskId);
+                    getAllTask();
+                })
         });
-
+        
         var taskItemInput = tasksNotCompleted[i].querySelector("input[type=\"checkbox\"");
         taskItemInput.addEventListener('change', (event) => {
+            console.log("checkd");
             if (event.currentTarget.checked) {
                 var taskId = tasksNotCompleted[i].querySelectorAll("input")[0].value;
                 taskToCompleted(taskId);
@@ -214,6 +200,19 @@ function getAllTask() {
     //  Thêm hiệu ứng và xử lý khi bỏ hoàn thành task
     var tasksCompleted = document.querySelectorAll(".all-completed-task .task-item");
     for (let i = 0; i < tasksCompleted.length; ++i) {
+        if (tasksCompleted[i].getAttribute("taskdesc") == "") {
+            tasksCompleted[i].querySelector(".task-more-infor").style.visibility = "hidden";
+        } else {
+            tasksCompleted[i].addEventListener('click', function() {
+                var taskDescription = tasksCompleted[i].querySelector(".task-description");
+                if (taskDescription.style.display == "none") {
+                    taskDescription.style.display = "inline-block";
+                } else {
+                    taskDescription.style.display = "none";
+                }
+            });
+        }
+
         var taskItemInput = tasksCompleted[i].querySelector("input[type=\"checkbox\"");
         taskItemInput.addEventListener('change', (event) => {
             if (!event.currentTarget.checked) {
@@ -228,6 +227,8 @@ function getAllTask() {
             }
         });
     }
+
+    calculateHeight();
 }
 
 function createCompletedTask(taskId) {
@@ -315,6 +316,19 @@ function deleteCompleteTask(taskId) {
 }
 
 function calculateHeight() {
+    
+    if (window.innerWidth >= 800) {
+        var divAllTask = document.querySelector(".all-task");
+        var divAllCompletedTask = document.querySelector(".all-completed-task");
+        var content = document.querySelector(".container");
+        divAllCompletedTask.style.maxHeight = ((content.getBoundingClientRect().height - 190) + "px");
+        divAllTask.style.maxHeight = ((content.getBoundingClientRect().height - 190) + "px");
+        console.log("big");
+        console.log(divAllCompletedTask.style.maxHeight);
+        return;
+    }
+
+    console.log("small");
     var divAllTask = document.querySelector(".all-task");
     var divAllCompletedTask = document.querySelector(".all-completed-task");
     var maxHeight = 360 - divAllTask.getBoundingClientRect().height;
