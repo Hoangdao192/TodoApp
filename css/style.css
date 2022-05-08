@@ -1,3 +1,7 @@
+:root {
+    --primary-color: #005457;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -21,6 +25,18 @@ body {
     width: 280px;
     height: 550px;
     background-color: white;
+    overflow: hidden;
+}
+
+.main {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: 25px;
+    align-items: center;
+    width: 280px;
+    height: 550px;
+    background-color: white;
     padding: 30px 20px;
     padding-bottom: 10px;
     overflow: hidden;
@@ -31,13 +47,7 @@ body {
     display: flex;
     width: 100%;
     align-items: center;
-}
-
-.top-bar h1 {
-    color: #005457;
-    font-size: 25px;
-    font-weight: 800;
-    display: inline-block;
+    justify-content: space-between;
 }
 
 .back-button {
@@ -46,7 +56,35 @@ body {
     margin-right: 20px;
 }
 
+.topbar__title {
+    display: flex;
+    align-items: center;
+}
+
+.topbar__title__title {
+    color: var(--primary-color);
+    font-size: 25px;
+    font-weight: 800;
+    display: inline-block;
+}
+
+.topbar__title__opensidebar {
+    margin-right: 20%;
+    color: var(--primary-color);
+}
+
+.topbar__actionbutton {
+    display: block;
+}
+
+.topbar__actionbutton--item {
+    display: inline-block;
+    margin-left: 10px;
+    color: var(--primary-color);
+}
+
 #app-setting {
+    color: var(--primary-color);
     position: absolute;
     top: 50%;
     right: 0;
@@ -405,31 +443,125 @@ body {
     cursor: pointer;
 }
 
-@media screen and (min-width: 800px) {
+/*------------------SIDE BAR----------------------*/
+
+.sidebar {
+    position: absolute;
+    display: none;
+    top: 0;
+    left: 0;
+    border-radius: 25px;
+    width: 85%;
+    max-width: 230px;
+    height: 550px;
+    background-color: white;
+    /* box-shadow: 5px 0px 5 5 black; */
+    box-shadow: 5px 0px 100px 1px #888888;
+    z-index: 1;
+    animation: sidebarIn 0.3s ease;
+}
+
+.sidebar__close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    color: #a5aaad;
+    cursor: pointer;
+    z-index: 1;
+}
+
+@keyframes sidebarIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes sidebarOut {
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+.userprofile {
+    position: relative;
+    width: 100%;
+    padding: 30px 0 20px 20px;
+    display: flex;
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.userprofile__avatar {
+    display: inline-block;
+    position: relative;
+    margin-bottom: 0;
+    background-image: url("../images/gaming-avatar.jpg");
+    background-color: #555;
+    background-size: contain;
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+    background-color: black;
+}
+
+.userprofile__name {
+    margin: auto 15px;
+    display: inline-block;
+    color: black;
+    font-weight: bold;
+}
+
+.userprofile__name__hello {
+    font-weight: 400;
+    color: #a5aaad;
+}
+
+.option {
+    padding: 20px 20px;
+}
+
+.option--item {
+    margin-left: 20px;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.option--item__title {
+    display: inline-block;
+    margin-left: 15px;
+}
+
+@media only screen and (min-width: 700px) {
     ::-webkit-scrollbar {
         width: 10px;
-      }
+    }
       
-      /* Track */
-      ::-webkit-scrollbar-track {
-        border-radius: 15px;
-        background: #f1f1f1;
-      }
-      
-      /* Handle */
-      ::-webkit-scrollbar-thumb {
-        border-radius: 15px;
-        background: #888;
-      }
-      
-      /* Handle on hover */
-      ::-webkit-scrollbar-thumb:hover {
-        background: #555;
-      }
+    /* Track */
+    ::-webkit-scrollbar-track {
+    border-radius: 15px;
+    background: #f1f1f1;
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+    border-radius: 15px;
+    background: #888;
+    }
+    
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    }
 
     .container {
         width: 80%;
         text-align: start;
+    }
+
+    .main {
+        width: 100%;
     }
 
     .content {
@@ -461,4 +593,56 @@ body {
         padding-right: 5px;
         overflow-y: auto;
     }
+}
+
+@media only screen and (min-width: 1000px) {
+    .container {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        border-radius: 0;
+        display: flex;
+        flex-direction: row;
+        align-items: unset;
+        overflow: unset;
+    }
+    
+    .main {
+        height: 90vh;
+        display: inline-block;
+        overflow: unset;
+    }
+
+    .sidebar {
+        position: relative;
+        display: inline-block !important;
+        box-shadow: none;
+        height: 100vh;
+        border-right: 1px solid aqua;
+        border-radius: 0;
+        animation: none !important;
+        transform: translateX(0);
+    }
+
+    .sidebar__close {
+        display: none;
+        visibility: hidden;
+        position: absolute
+    }
+
+    .topbar__title__opensidebar {
+        display: none;
+        visibility:hidden;
+        position: absolute;
+    }
+
+    .topbar__actionbutton {
+        margin-right: 60px
+    }
+
+    .add-button {
+        right: 60px;
+    }
+
 }

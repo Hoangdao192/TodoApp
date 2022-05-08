@@ -33,6 +33,25 @@ showMainActivity();
 /*Main activity*/
 addTaskButton.addEventListener("click", showAddTaskActivity);
 
+/*Side bar*/
+console.log(window.innerWidth)
+var sidebar = document.querySelector(".sidebar");
+var openSidebarButton = document.querySelector(".topbar__title__opensidebar");
+openSidebarButton.addEventListener('click', function(){
+    sidebar.style.animation = "sidebarIn 0.3s ease";
+    sidebar.style.display = "block";
+    sidebar.addEventListener('animationend', function(){
+        sidebar.style.display = "block";
+    })
+})
+var closeSidebarButton = document.querySelector(".sidebar__close");
+closeSidebarButton.addEventListener('click', function(){
+    sidebar.style.animation = "sidebarOut 0.3s ease";
+    sidebar.addEventListener('animationend', function(){
+        sidebar.style.display = "none";
+    })
+})
+
 /*Add task activity*/
 backButton.addEventListener("click", showMainActivity);
 var titleInput = document.getElementById("title-input");
@@ -192,35 +211,37 @@ function getAllTask() {
         var task = taskArray[i];
         //  Create not completed task
         if (task.status == "not completed") {
-            var item = "<div taskId=\"" + task.id + "\" taskTitle=\"" + task.title + "\" taskDesc=\"" + task.description + "\" class=\"task-item\">" +
-                        "<input style=\"display: none;\" type=\"text\" value=\"" + task.id + "\" id=\"taskId" + task.id + "\">" +
-                        "<input id=\"checkbox-" + task.id + "\" type=\"checkbox\">" +
-                        "<label for=\"checkbox-" + task.id + "\">" +
-                            "<i class=\"check-icon fa-xs fa-solid fa-check\"></i>" +
-                        "</label>" +
-                        "<p class=\"task-short-description\">" + task.title + "</p>" +
-                        "<div class=\"more\">" +
-                            "<p class=\"task-description\">" + task.description + "</p>" +
-                            "<div class=\"tool\">" +
-                                "<p class=\"tool-item tool-item-edit\">Edit</p>" +
-                                "<p class=\"tool-item tool-item-delete\">Delete</p>" +
-                            "</div>" +
-                        "</div>" +
-                    "</div>";
+            var item = `
+                <div taskId="${task.id}" taskTitle="${task.title}" taskDesc="${task.description}" class="task-item">
+                    <input style="display: none;" type="text" value=${task.id} id="taskId${task.id}">
+                    <input id="checkbox-${task.id}" type="checkbox">
+                    <label for="checkbox-${task.id}">
+                        <i class="check-icon fa-xs fa-solid fa-check"></i>
+                    </label>
+                    <p class="task-short-description">${task.title}</p>
+                    <div class="more">
+                        <p class="task-description">${task.description}</p>
+                        <div class="tool">
+                            <p class="tool-item tool-item-edit">Edit</p>
+                            <p class="tool-item tool-item-delete">Delete</p>
+                        </div>
+                    </div>
+                </div>`;
 
             taskNotCompletedContainer.innerHTML += item;
         } 
         //  Create completed task
         else {
-            var item = "<div taskId=\"" + task.id + "\" taskTitle=\"" + task.title + "\" taskDesc=\"" + task.description + "\" class=\"task-item\">" +
-                        "<input style=\"display: none;\" type=\"text\" value=\"" + task.id + "\" id=\"taskId" + task.id + "\">" +
-                        "<input checked id=\"checkbox-" + task.id + "\" type=\"checkbox\">" +
-                        "<label for=\"checkbox-" + task.id + "\">" +
-                            "<i class=\"check-icon fa-xs fa-solid fa-check\"></i>" +
-                        "</label>" +
-                        "<p class=\"task-short-description\">" + task.title + "</p>" + 
-                        "<p class=\"task-description\">" + task.description + "</p>"
-                    "</div>";
+            var item = `
+                <div taskId="${task.id}" taskTitle="${task.title}" taskDesc="${task.description}" class="task-item">
+                    <input style="display: none;" type="text" value=${task.id} id="taskId${task.id}">
+                    <input checked id="checkbox-${task.id}" type="checkbox">
+                    <label for="checkbox-${task.id}">
+                        <i class="check-icon fa-xs fa-solid fa-check"></i>
+                    </label>
+                    <p class="task-short-description">${task.title}</p>
+                    <p class="task-description">${task.description}</p>
+                </div>`;
 
             taskCompletedContainer.innerHTML += item;
         }

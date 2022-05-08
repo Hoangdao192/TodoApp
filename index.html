@@ -35,46 +35,78 @@
 
 <body>
     <div class="container">
-        <div class="top-bar">
-            <i style="display: none;" class="fa-solid fa-arrow-left back-button"></i>
-            <h1 id="app-title">Todo</h1>
-            <i id="app-setting" class="fa-solid fa-ellipsis"></i>
+        <div class="sidebar">
+            <i class="sidebar__close fa-solid fa-xmark"></i>
+            <div class="userprofile">
+                <div class="userprofile__avatar">
+                </div>
+                <div class="userprofile__name">
+                    <p class="userprofile__name__hello">Welcome,</p>
+                    Hoàng Đạo
+                </div>
+            </div>
+            <div class="option">
+                <div class="option--item">
+                    <i class="option--item__icon fa-solid fa-gear"></i>
+                    <p class="option--item__title">Cài đặt</p>
+                </div>
+                <div class="option--item">
+                    <i class="option--item__icon fa-solid fa-circle-info"></i>
+                    <p class="option--item__title">Thông tin</p>
+                </div>
+                <div class="option--item">
+                    <i class="option--item__icon fa-solid fa-right-from-bracket"></i>
+                    <p class="option--item__title">Đăng xuất</p>
+                </div>
+            </div>
         </div>
-        <div class="content">
-
-            <div class="main-activity">
-                <div class="task">
-                    <p class="section-title">Tasks</p>
-                    <div class="all-task">
-                    </div>
+        <div class="main">
+            <div class="top-bar">
+                <i style="display: none;" class="fa-solid fa-arrow-left back-button"></i>
+                <div class="topbar__title">
+                    <i class="topbar__title__opensidebar fa-solid fa-bars"></i>
+                    <h1 class="topbar__title__title" id="app-title">Todo</h1>
                 </div>
-                <div class="completed">
-                    <div class="title">
-                        <p class="section-title">Completed</p>
-                        <p id="clear-task">Clear</p>
-                    </div>
-                    <div class="all-completed-task">
-
-                    </div>
-                </div>
-                <div class="add-button">
-                    <i class="fa-solid fa-plus"></i>
+                <div class="topbar__actionbutton">
+                    <i class="topbar__actionbutton__search topbar__actionbutton--item fa-solid fa-magnifying-glass"></i>
+                    <i class="topbar__actionbutton__notification topbar__actionbutton--item fa-solid fa-bell"></i>
                 </div>
             </div>
-
-            <div class="add-task-activity">
-                <input type="text" placeholder="Title" id="title-input">
-                <p placeholder="Description" contenteditable="true" id="desc-input"></p>
-                <button id="save-task">Save</button>
-            </div>
-
-            <div class="edit-task-activity">
-                <input type="text" placeholder="Title" id="edit-title">
-                <p placeholder="Description" contenteditable="true" id="edit-desc"></p>
-                <button id="save-edit">Save</button>
-            </div>
+            <div class="content">
+                <div class="main-activity">
+                    <div class="task">
+                        <p class="section-title">Tasks</p>
+                        <div class="all-task">
+                        </div>
+                    </div>
+                    <div class="completed">
+                        <div class="title">
+                            <p class="section-title">Completed</p>
+                            <p id="clear-task">Clear</p>
+                        </div>
+                        <div class="all-completed-task">
+    
+                        </div>
+                    </div>
+                    <div class="add-button">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                </div>
+    
+                <div class="add-task-activity">
+                    <input type="text" placeholder="Title" id="title-input">
+                    <p placeholder="Description" contenteditable="true" id="desc-input"></p>
+                    <button id="save-task">Save</button>
+                </div>
+                <div class="edit-task-activity">
+                    <input type="text" placeholder="Title" id="edit-title">
+                    <p placeholder="Description" contenteditable="true" id="edit-desc"></p>
+                    <button id="save-edit">Save</button>
+                </div>
+        </div>
         </div>
     </div>
+    
 </body>
 <script src="javascript/script.js"></script>
 
